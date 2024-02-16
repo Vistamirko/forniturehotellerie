@@ -26,7 +26,7 @@ class CoreIconController extends BaseController
 
             foreach ($files as $file) {
                 $content = File::get($file);
-                $name = str_replace('.blade.php', '', basename($file));
+                $name = 'ti ti-' . str_replace('.blade.php', '', basename($file));
 
                 $icons[$name] = $content;
             }
@@ -44,10 +44,8 @@ class CoreIconController extends BaseController
             })
             ->slice(($currentPage - 1) * $perPage, $perPage)->all();
 
-        $paginatedIcons = (new LengthAwarePaginator($icons, count($collection), $perPage))
+        return (new LengthAwarePaginator($icons, count($collection), $perPage))
             ->setPath(route('core-icons'))
             ->appends($request->except('page'));
-
-        return $paginatedIcons;
     }
 }

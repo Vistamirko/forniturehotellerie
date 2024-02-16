@@ -50,11 +50,11 @@ class PermalinkField {
             }
         })
 
-        const toggleInputSlugState = () => {
+        const toggleInputSlugState = (isShow = false) => {
             const $icon = $slugBox.find('.slug-actions a')
             const $spinner = $('<div class="spinner-border spinner-border-sm" role="status"></div>')
 
-            if ($icon.hasClass('d-none')) {
+            if (isShow) {
                 $icon.removeClass('d-none')
                 $slugBox.find('.spinner-border').remove()
             } else {
@@ -81,9 +81,10 @@ class PermalinkField {
                     value: value,
                     slug_id: id.toString(),
                     model: form.find('input[name="model"]').val(),
+                    _token: form.find('input[name="_token"]').val(),
                 })
                 .then(({ data }) => {
-                    toggleInputSlugState()
+                    toggleInputSlugState(true)
 
                     const url = `${$slugId.data('view')}${data.toString().replace('/', '')}`
 

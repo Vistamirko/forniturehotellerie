@@ -112,9 +112,28 @@ class Manager
 
     public function removeUnusedThemeTranslations(): bool
     {
-        $theme = Theme::getThemeName();
+        if (Theme::hasInheritTheme()) {
+            $this->removeUnusedThemeTranslationsFromTheme(
+                Theme::getInheritTheme()
+            );
+        }
 
-        foreach ($this->files->allFiles(lang_path("vendor/themes/$theme")) as $file) {
+        $this->removeUnusedThemeTranslationsFromTheme(
+            Theme::getThemeName()
+        );
+
+        return true;
+    }
+
+    public function removeUnusedThemeTranslationsFromTheme(string $theme): bool
+    {
+        $themePath = lang_path("vendor/themes/$theme");
+
+        if (! $this->files->isDirectory($themePath)) {
+            return true;
+        }
+
+        foreach ($this->files->allFiles($themePath) as $file) {
             if ($this->files->isFile($file) && $file->getExtension() === 'json') {
                 $locale = $file->getFilenameWithoutExtension();
 

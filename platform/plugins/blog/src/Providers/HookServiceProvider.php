@@ -36,9 +36,10 @@ class HookServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        Menu::addMenuOptionModel(Category::class);
+        Menu::addMenuOptionModel(Tag::class);
+
         $this->app['events']->listen(RenderingMenuOptions::class, function () {
-            Menu::addMenuOptionModel(Category::class);
-            Menu::addMenuOptionModel(Tag::class);
             add_action(MENU_ACTION_SIDEBAR_OPTIONS, [$this, 'registerMenuOptions'], 2);
         });
 

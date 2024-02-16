@@ -313,4 +313,5 @@ return [
     ],
     'generate_invoice' => 'Generate invoice',
     'generated_invoice_successfully' => 'Generated invoice successfully!',
+    'order_cannot_be_canceled' => 'Order is processing or completed, cannot be canceled!',
 ];

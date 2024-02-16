@@ -435,8 +435,16 @@
                 event.preventDefault()
                 let _self = $(event.currentTarget)
 
+                let url = _self.data('section')
+
+                if (! url) {
+                    url = _self.prop('href')
+                }
+
+                console.log(url)
+
                 $('.delete-crud-entry')
-                    .data('section', _self.prop('href'))
+                    .data('section', url)
                     .data('parent-table', _self.closest('.table').prop('id'))
                 $('.modal-confirm-delete').modal('show')
             })

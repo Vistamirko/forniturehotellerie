@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool hideStorePhoneNumber()
  * @method static bool hideStoreEmail()
  * @method static bool hideStoreSocialLinks()
+ * @method static bool hideStoreAddress()
  * @method static bool allowVendorManageShipping()
  * @method static mixed sendMailToVendorAfterProcessingOrder($orders)
  * @method static \Botble\Base\Supports\EmailHandler setEmailVendorVariables(\Botble\Ecommerce\Models\Order $order)

@@ -784,7 +784,7 @@ abstract class TableAbstract extends DataTable implements ExtensibleContract
 
     public function getFilters(): array
     {
-        return $this->getAllBulkChanges();
+        return apply_filters('base_filter_table_filters', $this->getAllBulkChanges(), $this);
     }
 
     protected function addCreateButton(string $url, string|null $permission = null, array $buttons = []): array

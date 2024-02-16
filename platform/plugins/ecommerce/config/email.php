@@ -193,6 +193,11 @@ return [
             'can_off' => false,
             'variables' => [
                 'customer_name' => 'plugins/ecommerce::ecommerce.customer_name',
+                'customer_phone' => 'plugins/ecommerce::ecommerce.customer_phone',
+                'customer_address' => 'plugins/ecommerce::ecommerce.customer_address',
+                'payment_method' => 'plugins/ecommerce::ecommerce.payment_method',
+                'order_note' => 'plugins/ecommerce::ecommerce.order_note',
+                'order_id' => 'plugins/ecommerce::ecommerce.order_id',
                 'digital_product_list' => 'Digital product list',
             ],
         ],

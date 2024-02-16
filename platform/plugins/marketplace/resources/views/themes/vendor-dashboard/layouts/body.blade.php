@@ -78,7 +78,7 @@
                                 >
                             </a>
                         @endif
-                        <p>{!! BaseHelper::clean(str_replace('%Y', date('Y'), theme_option('copyright'))) !!}</p>
+                        <p>{!! BaseHelper::clean(str_replace('%Y', Carbon\Carbon::now()->year, theme_option('copyright'))) !!}</p>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
         id="vendor-dashboard"
     >
         <header class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fs-1">{{ page_title()->getTitle(false) }}</h3>
+            <h3 class="fs-1 mb-0">{{ page_title()->getTitle(false) }}</h3>
             <div class="d-flex align-items-center gap-4">
                 @if (is_plugin_active('language'))
                     @include(MarketplaceHelper::viewPath('vendor-dashboard.partials.language-switcher'))
@@ -97,17 +97,19 @@
 
                 @php($customer = auth('customer')->user())
 
-                @if ($customer?->store)
-                    <a href="{{ $customer->store->url }}" target="_blank" class="text-uppercase">
-                        <x-core::icon name="ti ti-building-store" />
-                        {{ __('View your store') }}
-                    </a>
-                @endif
+                <div class="d-none d-md-inline-block">
+                    @if ($customer?->store)
+                        <a href="{{ $customer->store->url }}" target="_blank" class="text-uppercase">
+                            <x-core::icon name="ti ti-building-store" />
+                            {{ __('View your store') }}
+                        </a>
+                    @endif
 
-                <a href="{{ route('public.index') }}" target="_blank" class="text-uppercase">
-                    {{ __('Go to homepage') }}
-                    <x-core::icon name="ti ti-arrow-right" />
-                </a>
+                    <a href="{{ route('public.index') }}" target="_blank" class="text-uppercase">
+                        <span>{{ __('Go to homepage') }}</span>
+                        <x-core::icon name="ti ti-arrow-right" />
+                    </a>
+                </div>
             </div>
         </header>
 

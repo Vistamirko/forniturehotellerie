@@ -34,6 +34,7 @@ return [
         'enable_product_approval' => 'Enable product approval',
         'hide_store_phone_number' => 'Hide store phone number?',
         'hide_store_email' => 'Hide store email?',
+        'hide_store_address' => 'Hide store address?',
         'hide_store_social_links' => 'Hide store social links?',
         'allow_vendor_manage_shipping' => 'Allow vendor manage shipping?',
         'commission_fee_each_category_fee_name' => 'Commission fee of commission setting :key',

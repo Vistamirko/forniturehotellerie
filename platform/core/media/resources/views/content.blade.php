@@ -713,7 +713,7 @@
             <li class="rv-media-list-title up-one-level js-up-one-level" title="{{ trans('core/media::media.up_level') }}">
                 <div class="custom-checkbox"></div>
                 <div class="rv-media-file-name">
-                    <i class="fas fa-level-up-alt"></i>
+                    <x-core::icon name="ti ti-corner-up-left" />
                     <span>...</span>
                 </div>
                 <div class="rv-media-file-size"></div>

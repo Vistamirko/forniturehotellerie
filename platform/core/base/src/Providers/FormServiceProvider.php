@@ -165,6 +165,12 @@ class FormServiceProvider extends ServiceProvider
             'attributes' => [],
         ]);
 
+        Form::component('timePicker', 'core/base::forms.partials.time-picker', [
+            'name',
+            'value' => null,
+            'attributes' => [],
+        ]);
+
         Form::component('codeEditor', 'core/base::forms.partials.code-editor', [
             'name',
             'value' => null,

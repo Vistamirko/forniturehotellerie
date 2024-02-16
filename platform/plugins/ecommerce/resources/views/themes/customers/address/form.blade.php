@@ -93,7 +93,7 @@
             <x-core::form.select
                 :label="trans('plugins/ecommerce::addresses.city')"
                 name="city"
-                :options="EcommerceHelper::getAvailableStatesByCountry(old('state', $address->state))"
+                :options="EcommerceHelper::getAvailableCitiesByState(old('state', $address->state))"
                 :value="old('city', $address->city)"
                 data-type="city"
                 data-url="{{ route('ajax.cities-by-state') }}"

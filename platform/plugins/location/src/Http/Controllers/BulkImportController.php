@@ -11,6 +11,7 @@ use Botble\Location\Exports\TemplateLocationExport;
 use Botble\Location\Location;
 use Botble\Location\Models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Excel;
 
 class BulkImportController extends BaseController
@@ -28,13 +29,13 @@ class BulkImportController extends BaseController
 
         $mimetypes = collect(config('plugins.location.general.bulk-import.mime_types', []))->implode(',');
 
-        Assets::addScriptsDirectly([
-            'vendor/core/plugins/location/js/bulk-import.js',
-        ])
-            ->addScripts(['dropzone'])
-            ->addStyles(['dropzone']);
+        Assets::addScriptsDirectly('vendor/core/plugins/location/js/bulk-import.js')
+            ->addScripts('dropzone')
+            ->addStyles('dropzone');
 
-        return view('plugins/location::bulk-import.index', compact('mimetypes'));
+        $locations = $this->getAvailableRemoteLocations();
+
+        return view('plugins/location::bulk-import.index', compact('mimetypes', 'locations'));
     }
 
     public function downloadTemplate(Request $request)
@@ -48,8 +49,10 @@ class BulkImportController extends BaseController
         return (new TemplateLocationExport($extension))->download($fileName, $writeType, $contentType);
     }
 
-    public function ajaxGetAvailableRemoteLocations(Location $location)
+    protected function getAvailableRemoteLocations()
     {
+        $location = app(Location::class);
+
         $remoteLocations = $location->getRemoteAvailableLocations();
 
         $availableLocations = Country::query()->pluck('code')->all();
@@ -72,18 +75,18 @@ class BulkImportController extends BaseController
             }
         }
 
-        $locations = array_unique($locations);
-
-        return $this
-            ->httpResponse()
-            ->setData(view('plugins/location::partials.available-remote-locations', compact('locations'))->render());
+        return array_unique($locations);
     }
 
-    public function importLocationData(string $countryCode, Location $location)
+    public function importLocationData(Request $request, Location $location)
     {
+        $request->validate([
+            'country_code' => ['required', 'string', Rule::in(array_keys($this->getAvailableRemoteLocations()))],
+        ]);
+
         BaseHelper::maximumExecutionTimeAndMemoryLimit();
 
-        $result = $location->downloadRemoteLocation($countryCode);
+        $result = $location->downloadRemoteLocation(strtolower($request->input('country_code')));
 
         return $this
             ->httpResponse()

@@ -15,7 +15,7 @@ class PostRequest extends Request
         $rules = [
             'name' => 'required|string|max:250',
             'description' => 'nullable|string|max:400',
-            'content' => 'nullable|string|max:100000',
+            'content' => 'nullable|string|max:300000',
             'tag' => 'nullable|string|max:255',
             'categories' => 'sometimes|array',
             'categories.*' => 'sometimes|exists:categories,id',

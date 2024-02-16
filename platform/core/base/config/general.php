@@ -31,6 +31,7 @@ return [
     'enable_https_support' => env('ENABLE_HTTPS_SUPPORT', false),
     'force_root_url' => env('FORCE_ROOT_URL'),
     'force_schema' => env('FORCE_SCHEMA'),
+    'max_execution_time' => env('CMS_MAX_EXECUTION_TIME', 300),
     'memory_limit' => env('CMS_MEMORY_LIMIT'),
     'date_format' => [
         'date' => env('CMS_DATE_FORMAT', 'Y-m-d'),
@@ -708,4 +709,5 @@ return [
     'using_uuids_for_id' => env('CMS_USING_UUIDS_FOR_ID', false),
     'using_ulids_for_id' => env('CMS_USING_ULIDS_FOR_ID', false),
     'type_id' => env('CMS_USING_TYPE_ID', 'BIGINT'),
+    'csv_import_input_encoding' => env('CMS_CSV_IMPORT_INPUT_ENCODING', 'UTF-8'),
 ];

@@ -88,6 +88,7 @@
     id="shortcode-modal"
     class="shortcode-modal"
     :scrollable="true"
+    data-bs-backdrop="static"
 >
     <form class="shortcode-data-form">
         <input

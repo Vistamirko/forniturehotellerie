@@ -121,7 +121,7 @@
 
                         @if (count($currencies) > 1)
                             <li>
-                                <a class="language-dropdown-active" href="#">{{ get_application_currency()->title }} <i class="fi-rs-angle-small-down"></i></a>
+                                <a class="language-dropdown-active" href="javascript:void(0)">{{ get_application_currency()->title }} <i class="fi-rs-angle-small-down"></i></a>
                                 <ul class="language-dropdown">
                                     @foreach ($currencies as $currency)
                                         <li><a href="{{ route('public.change-currency', $currency->title) }}">{{ $currency->title }}</a></li>
@@ -361,7 +361,7 @@
 
             @if (is_plugin_active('language'))
                 <div class="single-mobile-header-info">
-                    <a class="mobile-language-active" href="#"><i class="fi-rs-globe"></i> {{ __('Language') }} <span><i class="fi-rs-angle-down"></i></span></a>
+                    <a class="mobile-language-active" href="javascript:void(0)"><i class="fi-rs-globe"></i> {{ __('Language') }} <span><i class="fi-rs-angle-down"></i></span></a>
                     <div class="lang-curr-dropdown lang-dropdown-active">
                         <ul>
                             @php
@@ -378,7 +378,7 @@
 
             @if (count($currencies) > 1)
                 <div class="single-mobile-header-info">
-                    <a class="mobile-language-active" href="#"><i class="fi-rs-money"></i> {{ __('Currency') }} <span><i class="fi-rs-angle-down"></i></span></a>
+                    <a class="mobile-language-active" href="javascript:void(0)"><i class="fi-rs-money"></i> {{ __('Currency') }} <span><i class="fi-rs-angle-down"></i></span></a>
                     <div class="lang-curr-dropdown lang-dropdown-active">
                         <ul>
                             @foreach ($currencies as $currency)

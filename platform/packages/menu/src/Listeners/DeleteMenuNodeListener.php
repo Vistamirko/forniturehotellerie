@@ -17,7 +17,7 @@ class DeleteMenuNodeListener
         MenuNode::query()
             ->where([
                 'reference_id' => $event->data->getKey(),
-                'reference_type' => get_class($event->data),
+                'reference_type' => $event->data::class,
             ])
             ->delete();
     }

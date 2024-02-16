@@ -125,14 +125,14 @@ class StoreForm extends FormAbstract
                         'colspan' => 2,
                     ]);
             })
-            ->when(EcommerceHelper::isZipCodeEnabled(), function (FormAbstract $form) {
+            ->when($zipCodeEnabled = EcommerceHelper::isZipCodeEnabled(), function (FormAbstract $form) {
                 $form->add('zip_code', 'text', [
                     'label' => trans('plugins/marketplace::store.forms.zip_code'),
                     'attr' => [
                         'placeholder' => trans('plugins/marketplace::store.forms.zip_code_placeholder'),
                         'data-counter' => 120,
                     ],
-                    'colspan' => 3,
+                    'colspan' => 2,
                 ]);
             })
             ->add('address', 'text', [
@@ -141,7 +141,7 @@ class StoreForm extends FormAbstract
                     'placeholder' => trans('plugins/marketplace::store.forms.address_placeholder'),
                     'data-counter' => 120,
                 ],
-                'colspan' => 3,
+                'colspan' => $zipCodeEnabled ? 2 : 3,
             ])
             ->add('company', 'text', [
                 'label' => trans('plugins/marketplace::store.forms.company'),
@@ -149,18 +149,18 @@ class StoreForm extends FormAbstract
                     'placeholder' => trans('plugins/marketplace::store.forms.company_placeholder'),
                     'data-counter' => 255,
                 ],
-                'colspan' => 3,
+                'colspan' => $zipCodeEnabled ? 2 : 3,
             ])
             ->add('logo', 'mediaImage', [
                 'label' => trans('plugins/marketplace::store.forms.logo'),
-                'colspan' => 3,
+                'colspan' => 2,
             ])
             ->add(
                 'cover_image',
                 MediaImageField::class,
                 MediaImageFieldOption::make()
                     ->label(__('Cover Image'))
-                    ->colspan(6)
+                    ->colspan(2)
                     ->value($this->getModel()->id ? $this->getModel()->getMetaData('cover_image', true) : null)
                     ->toArray()
             )

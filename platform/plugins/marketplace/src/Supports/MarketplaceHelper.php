@@ -62,6 +62,11 @@ class MarketplaceHelper
         return (bool)$this->getSetting('hide_store_social_links', false);
     }
 
+    public function hideStoreAddress(): bool
+    {
+        return (bool)$this->getSetting('hide_store_address', false);
+    }
+
     public function allowVendorManageShipping(): bool
     {
         return (bool)$this->getSetting('allow_vendor_manage_shipping', false);

@@ -15,20 +15,20 @@
         @endif
 
         <p class="bb-store-item-address text-truncate">
-            <x-core::icons.map-pin />
+            <x-core::icon name="ti ti-map-pin" :wrapper="false" />
             {{ $store->full_address }}
         </p>
 
         @if (!MarketplaceHelper::hideStorePhoneNumber() && $store->phone)
             <p class="bb-store-item-phone">
-                <x-core::icons.phone />
+                <x-core::icon name="ti ti-phone" :wrapper="false" />
                 <a href="tel:{{ $store->phone }}">{{ $store->phone }}</a>
             </p>
         @endif
 
         @if (!MarketplaceHelper::hideStoreEmail() && $store->email)
             <p class="bb-store-item-address">
-                <x-core::icons.mail />
+                <x-core::icon name="ti ti-mail" :wrapper="false" />
                 <a href="mailto:{{ $store->email }}">{{ $store->email }}</a>
             </p>
         @endif
@@ -43,7 +43,7 @@
 
         <div class="bb-store-item-action">
             <a href="{{ $store->url }}" class="btn btn-primary">
-                <x-core::icons.building-store />
+                <x-core::icon name="ti ti-building-store" :wrapper="false" />
                 {{ __('Visit Store') }}
             </a>
         </div>

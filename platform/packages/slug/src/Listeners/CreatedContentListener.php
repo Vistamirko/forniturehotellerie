@@ -14,7 +14,7 @@ class CreatedContentListener
 {
     public function handle(CreatedContentEvent $event): void
     {
-        if (SlugHelper::isSupportedModel($class = get_class($event->data)) && $event->request->input('is_slug_editable', 0)) {
+        if (SlugHelper::isSupportedModel($class = $event->data::class) && $event->request->input('is_slug_editable', 0)) {
             try {
                 $slug = $event->request->input('slug');
 

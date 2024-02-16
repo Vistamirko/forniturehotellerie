@@ -1,7 +1,6 @@
 <?php
 
 use Botble\Base\Facades\AdminHelper;
-use Botble\SocialLogin\Facades\SocialService;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Botble\SocialLogin\Http\Controllers'], function () {

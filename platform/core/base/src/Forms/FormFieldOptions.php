@@ -24,7 +24,7 @@ class FormFieldOptions implements Arrayable
 
     protected array $labelAttributes = [];
 
-    protected array $wrapperAttributes = [];
+    protected array|bool $wrapperAttributes = [];
 
     protected bool $metadata = false;
 
@@ -61,14 +61,14 @@ class FormFieldOptions implements Arrayable
         return $this->labelAttributes;
     }
 
-    public function wrapperAttributes(array $attributes): static
+    public function wrapperAttributes(array|bool $attributes): static
     {
         $this->wrapperAttributes = $attributes;
 
         return $this;
     }
 
-    public function getWrapperAttributes(): array
+    public function getWrapperAttributes(): array|bool
     {
         return $this->wrapperAttributes;
     }
@@ -151,7 +151,7 @@ class FormFieldOptions implements Arrayable
             $data['label_attr'] = $this->getLabelAttributes();
         }
 
-        if ($this->wrapperAttributes) {
+        if ($this->wrapperAttributes || $this->wrapperAttributes === false) {
             $data['wrapper'] = $this->getWrapperAttributes();
         }
 

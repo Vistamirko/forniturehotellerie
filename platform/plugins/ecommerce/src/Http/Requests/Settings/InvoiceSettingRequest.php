@@ -30,7 +30,7 @@ class InvoiceSettingRequest extends Request
             'company_tax_id_for_invoicing' => ['nullable', 'string', 'max:120'],
             'company_logo_for_invoicing' => ['nullable', 'string', 'max:255'],
             'using_custom_font_for_invoice' => $onOffRule = new OnOffRule(),
-            'invoice_support_arabic_language' => $onOffRule,
+            'invoice_language_support' => ['sometimes', 'string'],
             'enable_invoice_stamp' => $onOffRule,
             'invoice_code_prefix' => ['nullable', 'string', 'max:120'],
             'disable_order_invoice_until_order_confirmed' => $onOffRule,

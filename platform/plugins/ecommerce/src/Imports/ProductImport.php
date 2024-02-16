@@ -95,9 +95,6 @@ class ProductImport implements
             ->get();
         $this->allTaxes = Tax::query()->get();
         $this->barcodes = collect();
-
-        config(['excel.imports.ignore_empty' => true]);
-        config(['excel.imports.csv.input_encoding' => 'ISO-8859-1']);
     }
 
     public function setImportType(string $importType): self

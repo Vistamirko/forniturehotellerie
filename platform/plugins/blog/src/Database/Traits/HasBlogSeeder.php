@@ -35,6 +35,8 @@ trait HasBlogSeeder
                     $this->createBlogCategory($child);
                 }
             }
+
+            $this->createMetadata($category, $item);
         }
     }
 
@@ -51,6 +53,8 @@ trait HasBlogSeeder
             $tag = Tag::query()->create($item);
 
             SlugHelper::createSlug($tag);
+
+            $this->createMetadata($tag, $item);
         }
     }
 
@@ -93,6 +97,8 @@ trait HasBlogSeeder
             ]));
 
             SlugHelper::createSlug($post);
+
+            $this->createMetadata($post, $item);
         }
     }
 

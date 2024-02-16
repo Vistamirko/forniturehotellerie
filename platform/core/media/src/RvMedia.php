@@ -859,8 +859,8 @@ class RvMedia
 
             $folder = MediaFolder::query()->create([
                 'user_id' => Auth::guard()->check() ? Auth::guard()->id() : 0,
-                'name' => MediaFolder::createName($folderSlug, 0),
-                'slug' => MediaFolder::createSlug($folderSlug, 0),
+                'name' => MediaFolder::createName($folderSlug, $parentId),
+                'slug' => MediaFolder::createSlug($folderSlug, $parentId),
                 'parent_id' => $parentId,
             ]);
         }
@@ -1028,8 +1028,7 @@ class RvMedia
         if (
             ! $config['hostname'] ||
             ! $config['storage_zone'] ||
-            ! $config['api_key'] ||
-            ! $config['region']
+            ! $config['api_key']
         ) {
             return;
         }

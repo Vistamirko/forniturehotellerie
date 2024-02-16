@@ -51,6 +51,7 @@ use Botble\Support\Http\Middleware\BaseMiddleware;
 use DateTimeZone;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Events\MigrationsStarted;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Filesystem\FilesystemManager;
@@ -148,6 +149,8 @@ class BaseServiceProvider extends ServiceProvider
             'laravel-form-builder.plain_form_class' => Form::class,
             'laravel-form-builder.form_builder_class' => FormBuilder::class,
             'laravel-form-builder.form_helper_class' => FormHelper::class,
+            'excel.imports.ignore_empty' => true,
+            'excel.imports.csv.input_encoding' => config('core.base.general.csv_import_input_encoding', 'UTF-8'),
         ]);
 
         $this->app->singleton('core.action', function () {
@@ -317,6 +320,14 @@ class BaseServiceProvider extends ServiceProvider
             });
         });
 
+        $events->listen(MigrationsStarted::class, function () {
+            rescue(function () {
+                if (DB::getDefaultConnection() === 'mysql') {
+                    DB::statement('SET SESSION sql_require_primary_key=0');
+                }
+            }, report: false);
+        });
+
         $this->registerPanelSections();
 
         Paginator::useBootstrap();
@@ -421,6 +432,14 @@ class BaseServiceProvider extends ServiceProvider
         $limitInt = Helper::convertHrToBytes($memoryLimit);
         if (-1 !== $currentLimitInt && (-1 === $limitInt || $limitInt > $currentLimitInt)) {
             BaseHelper::iniSet('memory_limit', $memoryLimit);
+        }
+
+        $maxExecutionTime = $this->app['config']->get('core.base.general.max_execution_time');
+
+        $currentExecutionTimeLimit = @ini_get('max_execution_time');
+
+        if ($currentExecutionTimeLimit < $maxExecutionTime) {
+            BaseHelper::iniSet('max_execution_time', $maxExecutionTime);
         }
     }
 

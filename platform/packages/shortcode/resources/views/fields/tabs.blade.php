@@ -96,6 +96,12 @@
                                             ]) !!}
                                             @break
 
+                                        @case('coreIcon')
+                                            {!! Form::coreIcon($name, Arr::get($attributes, $key), [...Arr::get($field, 'options', []),
+                                                'data-name' => $key,
+                                            ]) !!}
+                                            @break
+
                                         @default
                                             {!! Form::text($name, Arr::get($attributes, $key), [
                                                 'class' => 'form-control',

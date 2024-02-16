@@ -132,7 +132,11 @@
             border-color: #0a9928;
             color: #0a9928
         }
+
+        {{ settings.extra_css }}
     </style>
+
+    {{ settings.header_html }}
 
     {{ invoice_header_filter | raw }}
 </head>

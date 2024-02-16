@@ -1,5 +1,5 @@
 <ul class="font-sm mb-20">
-    @if ($store->address)
+    @if (! MarketplaceHelper::hideStoreAddress() && $store->full_address)
         <li>
             <span class="d-inline-block"><img src="{{ Theme::asset()->url('imgs/theme/icons/icon-location.svg') }}" alt="{{ __('Address') }}" /> <strong class="d-inline-block ms-1 me-1">{{ __('Address') }}:</strong> {{ $store->full_address }}</span>
         </li>

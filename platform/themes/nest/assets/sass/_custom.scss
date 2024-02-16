@@ -2171,3 +2171,16 @@ input.qty-input[type=number] {
         border-radius: 5px;
     }
 }
+
+.quick-view-content {
+    .product-detail {
+        .detail-info {
+            .short-desc {
+                display: -webkit-box;
+                -webkit-line-clamp: 10;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+        }
+    }
+}

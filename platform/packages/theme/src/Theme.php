@@ -891,10 +891,6 @@ class Theme implements ThemeContract
             $screenshot = $this->path($theme) . '/screenshot.png';
         }
 
-        if (! File::exists($screenshot) && $this->hasInheritTheme()) {
-            $screenshot = $this->path($this->getInheritTheme()) . '/screenshot.png';
-        }
-
         if (! File::exists($screenshot)) {
             return RvMedia::getDefaultImage();
         }
@@ -1108,54 +1104,81 @@ class Theme implements ThemeContract
                         'attributes' => [
                             'name' => 'social_links',
                             'value' => null,
-                            'fields' => [
-                                [
-                                    'type' => 'text',
-                                    'label' => __('Name'),
-                                    'attributes' => [
-                                        'name' => 'name',
-                                        'value' => null,
-                                        'options' => [
-                                            'class' => 'form-control',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'coreIcon',
-                                    'label' => __('Icon'),
-                                    'attributes' => [
-                                        'name' => 'icon',
-                                        'value' => null,
-                                        'options' => [
-                                            'class' => 'form-control',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'text',
-                                    'label' => __('URL'),
-                                    'attributes' => [
-                                        'name' => 'url',
-                                        'value' => null,
-                                        'options' => [
-                                            'class' => 'form-control',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'mediaImage',
-                                    'label' => __('Icon Image (It will override icon above if set)'),
-                                    'attributes' => [
-                                        'name' => 'image',
-                                        'value' => null,
-                                    ],
-                                ],
-                            ],
+                            'fields' => $this->getSocialLinksRepeaterFields(),
                         ],
                     ],
                 ],
             ]);
         });
+    }
+
+    public function getSocialLinksRepeaterFields(): array
+    {
+        return [
+            [
+                'type' => 'text',
+                'label' => __('Name'),
+                'attributes' => [
+                    'name' => 'name',
+                    'value' => null,
+                    'options' => [
+                        'class' => 'form-control',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'coreIcon',
+                'label' => __('Icon'),
+                'attributes' => [
+                    'name' => 'icon',
+                    'value' => null,
+                    'options' => [
+                        'class' => 'form-control',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'text',
+                'label' => __('URL'),
+                'attributes' => [
+                    'name' => 'url',
+                    'value' => null,
+                    'options' => [
+                        'class' => 'form-control',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'mediaImage',
+                'label' => __('Icon Image (It will override icon above if set)'),
+                'attributes' => [
+                    'name' => 'image',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type' => 'customColor',
+                'label' => __('Color'),
+                'attributes' => [
+                    'name' => 'color',
+                    'value' => 'transparent',
+                    'options' => [
+                        'default_value' => 'transparent',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'customColor',
+                'label' => __('Background color'),
+                'attributes' => [
+                    'name' => 'background-color',
+                    'value' => null,
+                    'options' => [
+                        'default_value' => 'transparent',
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1175,19 +1198,35 @@ class Theme implements ThemeContract
             return [];
         }
 
+        return $this->convertSocialLinksToArray($data);
+    }
+
+    public function convertSocialLinksToArray(array $data): array
+    {
+        if (empty($data)) {
+            return [];
+        }
+
         $socialLinks = [];
 
         foreach ($data as $item) {
             $item = collect($item)->pluck('value', 'key');
 
             $socialLinks[] = new SocialLink(
-                name: $item->get('name'),
-                url: $item->get('url'),
-                icon: $item->get('icon'),
-                image: $item->get('image')
+                name: $item->get('name') ?: $item->get('social-name'),
+                url: $item->get('url') ?: $item->get('social-url'),
+                icon: $item->get('icon') ?: $item->get('social-icon'),
+                image: $item->get('image') ?: $item->get('social-image'),
+                color: $item->get('color'),
+                backgroundColor: $item->get('background-color')
             );
         }
 
         return $socialLinks;
+    }
+
+    public function getThemeIcons(): array
+    {
+        return apply_filters('theme_icon_list_icons', []);
     }
 }

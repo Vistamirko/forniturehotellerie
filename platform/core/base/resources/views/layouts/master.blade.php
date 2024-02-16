@@ -8,7 +8,7 @@
             ])>
             @include('core/base::layouts.partials.page-header')
 
-            <div class="page-body">
+            <div class="page-body page-content">
                 <div class="{{ AdminAppearance::getContainerWidth() }}">
                     {!! apply_filters('core_layout_before_content', null) !!}
 

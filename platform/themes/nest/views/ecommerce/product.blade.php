@@ -223,7 +223,7 @@
                             </div>
                         </div>
                         <ul class="contact-infor mb-50">
-                            @if ($product->store->full_address)
+                            @if (! MarketplaceHelper::hideStoreAddress() && $product->store->full_address)
                                 <li>
                                     <img src="{{ Theme::asset()->url('imgs/theme/icons/icon-location.svg') }}" alt="{{ __('Address') }}" />
                                     <strong>{{ __('Address') }}: </strong>

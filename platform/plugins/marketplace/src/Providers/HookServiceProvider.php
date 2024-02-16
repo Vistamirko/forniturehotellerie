@@ -107,12 +107,13 @@ class HookServiceProvider extends ServiceProvider
 
                     if (
                         $model instanceof BaseModel &&
-                        in_array('vendor', Route::current()->middleware()) &&
-                        auth('customer')->check() &&
-                        auth('customer')->user()->is_vendor &&
                         Language::getCurrentAdminLocaleCode() != Language::getDefaultLocaleCode() &&
                         $model->getKey() &&
-                        LanguageAdvancedManager::isSupported($model)
+                        LanguageAdvancedManager::isSupported($model) &&
+                        Route::current() &&
+                        in_array('vendor', Route::current()->middleware()) &&
+                        auth('customer')->check() &&
+                        auth('customer')->user()->is_vendor
                     ) {
                         $refLang = null;
 
@@ -139,39 +140,39 @@ class HookServiceProvider extends ServiceProvider
             if (MarketplaceHelper::isVendorRegistrationEnabled()) {
                 add_filter('ecommerce_customer_registration_form_validation_rules', function (array $rules): array {
                     return $rules + [
-                            'shop_name' => [
-                                'nullable',
-                                'required_if:is_vendor,1',
-                                'string',
-                                'min:2',
-                            ],
-                            'shop_phone' => [
-                                    'nullable',
-                                    'required_if:is_vendor,1',
-                                ] + explode('|', BaseHelper::getPhoneValidationRule()),
-                            'shop_url' => [
-                                'nullable',
-                                'required_if:is_vendor,1',
-                                'string',
-                                'min:2',
-                            ],
-                        ];
+                        'shop_name' => [
+                            'nullable',
+                            'required_if:is_vendor,1',
+                            'string',
+                            'min:2',
+                        ],
+                        'shop_phone' => [
+                            'nullable',
+                            'required_if:is_vendor,1',
+                        ] + explode('|', BaseHelper::getPhoneValidationRule()),
+                        'shop_url' => [
+                            'nullable',
+                            'required_if:is_vendor,1',
+                            'string',
+                            'min:2',
+                        ],
+                    ];
                 }, 45, 2);
 
                 add_filter('ecommerce_customer_registration_form_validation_attributes', function (array $attributes): array {
                     return $attributes + [
-                            'shop_name' => __('Shop Name'),
-                            'shop_phone' => __('Shop Phone'),
-                            'shop_url' => __('Shop URL'),
-                        ];
+                        'shop_name' => __('Shop Name'),
+                        'shop_phone' => __('Shop Phone'),
+                        'shop_url' => __('Shop URL'),
+                    ];
                 }, 45);
 
                 add_filter('ecommerce_customer_registration_form_validation_messages', function (array $attributes): array {
                     return $attributes + [
-                            'shop_name.required_if' => __('Shop Name is required.'),
-                            'shop_phone.required_if' => __('Shop Phone is required.'),
-                            'shop_url.required_if' => __('Shop URL is required.'),
-                        ];
+                        'shop_name.required_if' => __('Shop Name is required.'),
+                        'shop_phone.required_if' => __('Shop Phone is required.'),
+                        'shop_url.required_if' => __('Shop URL is required.'),
+                    ];
                 }, 45);
 
                 add_action('customer_register_validation', function ($request) {
@@ -606,15 +607,15 @@ class HookServiceProvider extends ServiceProvider
                     $keyword = request()->input('search.value');
                     if ($keyword) {
                         $query
-                            ->where('name', 'LIKE', '%' . $keyword . '%')
+                            ->where('ec_products.name', 'LIKE', '%' . $keyword . '%')
                             ->where('is_variation', 0)
                             ->orWhere(function ($query) use ($keyword) {
                                 $query
                                     ->where('is_variation', 0)
                                     ->where(function ($query) use ($keyword) {
                                         $query
-                                            ->orWhere('sku', 'LIKE', '%' . $keyword . '%')
-                                            ->orWhere('created_at', 'LIKE', '%' . $keyword . '%')
+                                            ->orWhere('ec_products.sku', 'LIKE', '%' . $keyword . '%')
+                                            ->orWhere('ec_products.created_at', 'LIKE', '%' . $keyword . '%')
                                             ->orWhereHas('store', function ($subQuery) use ($keyword) {
                                                 return $subQuery->where('name', 'LIKE', '%' . $keyword . '%');
                                             });
@@ -759,7 +760,7 @@ class HookServiceProvider extends ServiceProvider
 
         if (Auth::user()->hasPermission('products.index')) {
             $countPendingProducts = Product::query()
-                ->where('status', BaseStatusEnum::PENDING)
+                ->wherePublished()
                 ->where('created_by_type', Customer::class)
                 ->where('created_by_id', '!=', 0)
                 ->where('approved_by', 0)
@@ -771,7 +772,7 @@ class HookServiceProvider extends ServiceProvider
             ];
 
             $pendingOrders = Order::query()
-                ->where('status', BaseStatusEnum::PENDING)
+                ->wherePublished()
                 ->where('is_finished', 1)
                 ->count();
 

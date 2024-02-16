@@ -2,8 +2,8 @@
     @continue(! $item->image)
 
     <div {!! Html::attributes($attributes) !!}>
-        @if($item->url)
-            <a href="{{ route('public.ads-click', $item->key) }}" title="{{ $item->name }}" @if($item->open_in_new_tab) target="_blank" @endif>
+        @if ($item->url)
+            <a href="{{ route('public.ads-click', $item->key) }}" @if($item->open_in_new_tab) target="_blank" @endif title="{{ $item->name }}">
         @endif
                 <picture>
                     <source

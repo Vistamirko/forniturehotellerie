@@ -167,6 +167,8 @@ class OrderController extends BaseController
                     'order_id' => $order->id,
                     'charge_id' => Str::upper(Str::random(10)),
                     'user_id' => $userId,
+                    'customer_id' => $customerId,
+                    'customer_type' => Customer::class,
                 ]);
 
                 $order->payment_id = $payment->id;
@@ -1124,11 +1126,12 @@ class OrderController extends BaseController
                 'extras' => [],
                 'sku' => $product->sku,
                 'weight' => $product->original_product->weight,
-                'original_price' => $product->original_price,
+                'original_price' => $product->front_sale_price,
                 'product_link' => route('products.edit', $product->original_product->id),
                 'product_type' => (string)$product->product_type,
             ];
-            $price = $product->original_price;
+
+            $price = $product->front_sale_price;
             $price = Cart::getPriceByOptions($price, $productOptions);
 
             $cartItem = CartItem::fromAttributes(
@@ -1201,7 +1204,7 @@ class OrderController extends BaseController
                         'name' => $product->name,
                         'description' => $product->description,
                         'qty' => $cartItem->qty,
-                        'price' => $product->original_price,
+                        'price' => $product->front_sale_price,
                     ];
                 }
             }

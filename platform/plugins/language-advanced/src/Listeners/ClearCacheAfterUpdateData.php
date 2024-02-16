@@ -13,7 +13,7 @@ class ClearCacheAfterUpdateData
             return;
         }
 
-        $cache = new Cache(app('cache'), get_class($event->data));
+        $cache = new Cache(app('cache'), $event->data::class);
         $cache->flush();
     }
 }

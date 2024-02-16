@@ -15,7 +15,7 @@ class UpdatedContentListener
 {
     public function handle(UpdatedContentEvent $event): void
     {
-        if (SlugHelper::isSupportedModel($class = get_class($event->data)) && $event->request->input('is_slug_editable', 0)) {
+        if (SlugHelper::isSupportedModel($class = $event->data::class) && $event->request->input('is_slug_editable', 0)) {
             try {
                 $slug = $event->request->input('slug');
 
@@ -60,10 +60,7 @@ class UpdatedContentListener
                     ]);
                 }
 
-                /**
-                 * @var Slug $item
-                 */
-                event(new UpdatedSlugEvent($event->data, $item));
+                UpdatedSlugEvent::dispatch($event->data, $item);
             } catch (Exception $exception) {
                 BaseHelper::logError($exception);
             }

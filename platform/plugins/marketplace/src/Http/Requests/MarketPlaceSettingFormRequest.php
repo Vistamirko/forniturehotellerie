@@ -28,6 +28,7 @@ class MarketPlaceSettingFormRequest extends BaseProductRequest
             'enable_product_approval' => 'sometimes|in:0,1',
             'hide_store_phone_number' => 'sometimes|in:0,1',
             'hide_store_email' => 'sometimes|in:0,1',
+            'hide_store_address' => 'sometimes|in:0,1',
             'allow_vendor_manage_shipping' => 'sometimes|in:0,1',
             'hide_store_social_links' => 'sometimes|in:0,1',
             'fee_per_order' => 'sometimes|min:0|max:100|numeric',

@@ -119,7 +119,7 @@ class SlugServiceProvider extends ServiceProvider
                             if (
                                 ! $slug ||
                                 ! $slug->key ||
-                                (get_class($model) == Page::class && BaseHelper::isHomepage($model->getKey()))
+                                ($model instanceof Page && BaseHelper::isHomepage($model->getKey()))
                             ) {
                                 return route('public.index');
                             }

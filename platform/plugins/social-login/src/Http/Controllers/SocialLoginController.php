@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\AbstractUser;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class SocialLoginController extends BaseController
 {
@@ -103,6 +104,10 @@ class SocialLoginController extends BaseController
 
             if (! $message) {
                 $message = __('An error occurred while trying to login');
+            }
+
+            if ($exception instanceof InvalidStateException) {
+                $message = __('InvalidStateException occurred while trying to login');
             }
 
             return $this

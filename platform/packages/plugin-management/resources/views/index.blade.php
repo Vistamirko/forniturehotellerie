@@ -2,7 +2,7 @@
 
 @push('header-action')
     @if (
-        config('packages.plugin-management.general.enable_marketplace_feature')
+        $isEnabledMarketplaceFeature = config('packages.plugin-management.general.enable_marketplace_feature')
         && auth()->user()->hasPermission('plugins.marketplace')
     )
         <x-core::button
@@ -94,16 +94,18 @@
                                 </x-core::button>
                             @endif
 
-                            <x-core::button
-                                class="btn-trigger-update-plugin"
-                                color="success"
-                                style="display: none;"
-                                data-name="{{ $plugin->path }}"
-                                data-check-update="{{ $plugin->id ?? 'plugin-' . $plugin->path }}"
-                                data-version="{{ $plugin->version }}"
-                            >
-                                {{ trans('packages/plugin-management::plugin.update') }}
-                            </x-core::button>
+                            @if ($isEnabledMarketplaceFeature)
+                                <x-core::button
+                                    class="btn-trigger-update-plugin"
+                                    color="success"
+                                    style="display: none;"
+                                    data-name="{{ $plugin->path }}"
+                                    data-check-update="{{ $plugin->id ?? 'plugin-' . $plugin->path }}"
+                                    data-version="{{ $plugin->version }}"
+                                >
+                                    {{ trans('packages/plugin-management::plugin.update') }}
+                                </x-core::button>
+                            @endif
 
                             @if (auth()->user()->hasPermission('plugins.remove'))
                                 <x-core::button
@@ -136,22 +138,24 @@
         :submit-button-label="trans('packages/plugin-management::plugin.remove_plugin_confirm_yes')"
     />
 
-    <x-core::modal
-        id="confirm-install-plugin-modal"
-        :title="trans('packages/plugin-management::plugin.install_plugin')"
-        button-id="confirm-install-plugin-button"
-        :button-label="trans('packages/plugin-management::plugin.install')"
-    >
-        <input
-            type="hidden"
-            name="plugin_name"
-            value=""
+    @if ($isEnabledMarketplaceFeature)
+        <x-core::modal
+            id="confirm-install-plugin-modal"
+            :title="trans('packages/plugin-management::plugin.install_plugin')"
+            button-id="confirm-install-plugin-button"
+            :button-label="trans('packages/plugin-management::plugin.install')"
         >
-        <input
-            type="hidden"
-            name="ids"
-            value=""
-        >
-        <p id="requirement-message"></p>
-    </x-core::modal>
+            <input
+                type="hidden"
+                name="plugin_name"
+                value=""
+            >
+            <input
+                type="hidden"
+                name="ids"
+                value=""
+            >
+            <p id="requirement-message"></p>
+        </x-core::modal>
+    @endif
 @endsection

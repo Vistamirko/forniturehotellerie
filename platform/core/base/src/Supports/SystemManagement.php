@@ -52,13 +52,14 @@ class SystemManagement
             'debug_mode' => $app->hasDebugModeEnabled(),
             'storage_dir_writable' => File::isWritable($app->storagePath()),
             'cache_dir_writable' => File::isReadable($app->bootstrapPath('cache')),
-            'app_size' => BaseHelper::humanFilesize(self::calculateAppSize($app->basePath())),
+            'app_size' => 'N/A',
         ];
     }
 
     protected static function calculateAppSize(string $directory): int
     {
         $size = 0;
+
         foreach (File::glob(rtrim($directory, '/') . '/*', GLOB_NOSORT) as $each) {
             $size += File::isFile($each) ? File::size($each) : self::calculateAppSize($each);
         }
@@ -121,5 +122,10 @@ class SystemManagement
     public static function getMaximumExecutionTime(): int
     {
         return (int) (@ini_get('max_execution_time') ?: -1);
+    }
+
+    public static function getAppSize(): int
+    {
+        return self::calculateAppSize(app()->basePath());
     }
 }

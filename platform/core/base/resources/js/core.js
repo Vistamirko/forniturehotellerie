@@ -26,6 +26,10 @@ class Botble {
         const $coreIcon = $(document).find('[data-bb-core-icon]')
 
         const formatTemplate = ({ id, text }) => {
+            if (typeof id === 'undefined') {
+                id = '';
+            }
+
             return $(`<span><span class="dropdown-item-indicator">${text}</span> ${id}</span>`)
         }
 
@@ -1413,6 +1417,10 @@ class Botble {
      * @param {object} options
      */
     static select(element, options = {}) {
+        if (! jQuery().select2) {
+            return;
+        }
+
         options = {
             width: '100%',
             ...options,
@@ -1578,7 +1586,9 @@ class Botble {
                     ],
                 ],
                 change: (color) => {
-                    $current.val(color.toRgbString())
+                    if (color) {
+                        $current.val(color.toRgbString())
+                    }
                 },
             }
 
@@ -1801,6 +1811,23 @@ class Botble {
                 Botble.handleError(response)
             }
         });
+    }
+
+    static unmaskInputNumber($form, formData) {
+        if (jQuery().inputmask) {
+            $form.find('input.input-mask-number').map(function (i, e) {
+                const $input = $(e)
+                if ($input.inputmask) {
+                    if ($.isArray(formData)) {
+                        formData[$input.attr('name')] = $input.inputmask('unmaskedvalue')
+                    } else {
+                        formData.append($input.attr('name'), $input.inputmask('unmaskedvalue'))
+                    }
+                }
+            })
+
+            return formData
+        }
     }
 }
 

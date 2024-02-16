@@ -121,13 +121,13 @@ $(() => {
 
         const $button = $form.find('button[type=submit]')
 
-        Botble.showLoading($form)
-        Botble.showButtonLoading($button)
-
-        container.find('.bulk-import-message').removeClass('alert-success').addClass('alert-info').hide()
-        container.find('.show-errors').hide()
-
         if (dropzone.getQueuedFiles().length > 0) {
+            Botble.showLoading($form)
+            Botble.showButtonLoading($button)
+
+            container.find('.bulk-import-message').removeClass('alert-success').addClass('alert-info').hide()
+            container.find('.show-errors').hide()
+
             dropzone.processQueue()
         }
 
@@ -178,45 +178,23 @@ $(() => {
             })
     })
 
-    const $availableRemoteLocations = $(document).find('#available-remote-locations')
+    $(document).on('submit', '.form-import-available-data', (e) => {
+        const currentTarget = $(e.currentTarget)
 
-    if ($availableRemoteLocations.length) {
-        let getRemoteLocations = () => {
-            $httpClient
-                .make()
-                .get($availableRemoteLocations.data('url'))
-                .then(({ data: response }) => {
-                    $availableRemoteLocations.html(response.data)
-                })
-        }
+        $httpClient
+            .make()
+            .withButtonLoading(currentTarget.find('button[type=submit]'))
+            .post(currentTarget.prop('action'), currentTarget.serialize())
+            .then(({ error,  data }) => {
+                if (error) {
+                    Botble.showError(data.message)
 
-        getRemoteLocations()
+                    return
+                }
 
-        $(document).on('click', '.btn-import-location-data', function (event) {
-            event.preventDefault()
+                Botble.showSuccess(data.message)
 
-            $(document).find('.button-confirm-import').data('url', $(this).data('url'))
-            $(document).find('.modal-confirm-import').modal('show')
-        })
-
-        $(document)
-            .find('.button-confirm-import')
-            .on('click', (event) => {
-                event.preventDefault()
-                let _self = $(event.currentTarget)
-
-                Botble.showButtonLoading(_self)
-
-                $httpClient
-                    .make()
-                    .post(_self.data('url'))
-                    .then(({ data }) => {
-                        _self.closest('.modal').modal('hide')
-                        return Botble.showSuccess(data.message)
-                    })
-                    .finally(() => {
-                        Botble.hideButtonLoading(_self)
-                    })
+                currentTarget[0].reset()
             })
-    }
+    })
 })

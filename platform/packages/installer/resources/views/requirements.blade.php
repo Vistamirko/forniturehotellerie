@@ -37,8 +37,8 @@
                     <x-core::icon
                         :name="'ti ' . ($enabled ? 'ti-circle-check' : 'ti-alert-circle')"
                         @class([
-                            'text-success' => $phpSupportInfo['supported'],
-                            'text-danger' => !$phpSupportInfo['supported'],
+                            'text-success' => $enabled,
+                            'text-danger' => !$enabled,
                         ])
                     />
                 </div>

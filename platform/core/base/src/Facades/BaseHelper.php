@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string getDateFormat()
  * @method static string getDateTimeFormat()
  * @method static string joinPaths(array $paths)
- * @method static bool hasIcon(string $name)
+ * @method static bool hasIcon(string|null $name)
  * @method static string renderIcon(string $name, string|null $size = null, array $attributes = [])
  * @method static string renderBadge(string $label, string $color = 'primary', array $attributes = [])
  *

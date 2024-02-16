@@ -2,9 +2,11 @@
 
 namespace Botble\Ecommerce\Forms\Settings;
 
+use Botble\Base\Forms\FieldOptions\RadioFieldOption;
 use Botble\Base\Forms\FieldOptions\SelectFieldOption;
 use Botble\Base\Forms\FieldOptions\TextFieldOption;
 use Botble\Base\Forms\Fields\GoogleFontsField;
+use Botble\Base\Forms\Fields\RadioField;
 use Botble\Base\Forms\Fields\SelectField;
 use Botble\Base\Forms\Fields\TextField;
 use Botble\Base\Forms\FormAbstract;
@@ -129,11 +131,22 @@ class InvoiceSettingForm extends SettingForm
             ->add('close_fieldset_custom_font_settings', 'html', [
                 'html' => '</fieldset>',
             ])
-            ->add('invoice_support_arabic_language', 'onOffCheckbox', [
-                'label' => trans('plugins/ecommerce::setting.invoice.form.invoice_support_arabic_language'),
-                'value' => get_ecommerce_setting('invoice_support_arabic_language', false),
-                'colspan' => 6,
-            ])
+            ->add(
+                'invoice_language_support',
+                RadioField::class,
+                RadioFieldOption::make()
+                    ->label(trans('plugins/ecommerce::setting.invoice.form.add_language_support'))
+                    ->choices([
+                        'arabic' => 'Arabic',
+                        'bangladesh' => 'Bangladesh',
+                        'chinese' => 'Chinese',
+                    ])
+                    ->when(InvoiceHelper::getLanguageSupport(), function (RadioFieldOption $option, string $language) {
+                        $option->selected($language);
+                    })
+                    ->colspan(6)
+                    ->toArray()
+            )
             ->add('enable_invoice_stamp', 'onOffCheckbox', [
                 'label' => trans('plugins/ecommerce::setting.invoice.form.enable_invoice_stamp'),
                 'value' => get_ecommerce_setting('enable_invoice_stamp', true),

@@ -60,7 +60,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static void registerThemeIconFields(array $icons, array $css = [], array $js = [])
  * @method static void registerFacebookIntegration()
  * @method static void registerSocialLinks()
+ * @method static array getSocialLinksRepeaterFields()
  * @method static array getSocialLinks()
+ * @method static array convertSocialLinksToArray(array $data)
+ * @method static array getThemeIcons()
  *
  * @see \Botble\Theme\Theme
  */

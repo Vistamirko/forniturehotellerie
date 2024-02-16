@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Supports;
 
 use Barryvdh\DomPDF\PDF as PDFHelper;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Facades\EmailHandler;
 use Botble\Base\Facades\Html;
@@ -84,7 +85,10 @@ class OrderHelper
         }
 
         foreach ($orders as $order) {
-            if ((float)$order->amount && (is_plugin_active('payment') && ! empty(PaymentMethods::methods()) && ! $order->payment_id)) {
+            if (
+                (float)$order->amount
+                && (is_plugin_active('payment') && ! empty(PaymentMethods::methods()) && ! $order->payment_id)
+            ) {
                 continue;
             }
 
@@ -228,6 +232,10 @@ class OrderHelper
             'customer_address' => $order->full_address,
             'product_list' => view('plugins/ecommerce::emails.partials.order-detail', compact('order'))
                 ->render(),
+            'digital_product_list' => EcommerceHelperFacade::isEnabledSupportDigitalProducts() ? view(
+                'plugins/ecommerce::emails.partials.digital-product-list',
+                compact('order')
+            )->render() : null,
             'shipping_method' => $order->shipping_method_name,
             'payment_method' => $paymentMethod,
             'order_delivery_notes' => view(
@@ -280,13 +288,7 @@ class OrderHelper
 
         if ($digitalProductsCount = EcommerceHelperFacade::countDigitalProducts($order->products)) {
             $mailer = EmailHandler::setModule(ECOMMERCE_MODULE_SCREEN_NAME);
-            $view = view('plugins/ecommerce::emails.partials.digital-product-list', compact('order'))->render();
-            $mailer->setVariableValues([
-                'customer_name' => BaseHelper::clean($order->user->name ?: $order->address->name),
-                'payment_method' => is_plugin_active('payment') ? $order->payment->payment_channel->label() : '&mdash;',
-                'digital_product_list' => $view,
-            ]);
-
+            $this->setEmailVariables($order);
             $mailer->sendUsingTemplate('download_digital_products', $order->user->email ?: $order->address->email);
 
             if ($digitalProductsCount === $order->products->count()) {
@@ -390,7 +392,7 @@ class OrderHelper
                 BaseHelper::clean(
                     $history->user ? $history->user->name : (
                         $history->order->user->name ?:
-                            $history->order->address->name
+                        $history->order->address->name
                     )
                 ),
         ];
@@ -486,6 +488,10 @@ class OrderHelper
 
     public function handleAddCart(Product $product, Request $request): array
     {
+        if ($product->status != BaseStatusEnum::PUBLISHED) {
+            throw new Exception(__('Product is not published yet.'));
+        }
+
         $parentProduct = $product->original_product;
 
         $image = $product->image ?: $parentProduct->image;
@@ -706,7 +712,6 @@ class OrderHelper
 
                 $orderBillingAddress->fill($billingAddressData);
                 $orderBillingAddress->save();
-
             } else {
                 OrderAddress::query()
                     ->where([

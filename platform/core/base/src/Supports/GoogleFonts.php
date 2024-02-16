@@ -89,17 +89,23 @@ class GoogleFonts
 
         $localizedCss = $response->body();
 
-        foreach ($this->extractFontUrls($response) as $fontUrl) {
+        $extractedFonts = $this->extractFontUrls($response);
+
+        foreach ($extractedFonts as $fontUrl) {
             $localizedFontUrl = $this->localizeFontUrl($fontUrl);
 
-            $this->filesystem->put(
-                $this->path($url, $localizedFontUrl),
-                Http::withoutVerifying()->get($fontUrl)->body(),
-            );
+            $storedFontPath = $this->path($url, $localizedFontUrl);
+
+            if (! $this->filesystem->exists($storedFontPath)) {
+                $this->filesystem->put(
+                    $storedFontPath,
+                    Http::withoutVerifying()->get($fontUrl)->body(),
+                );
+            }
 
             $localizedCss = str_replace(
                 $fontUrl,
-                $this->filesystem->url($this->path($url, $localizedFontUrl)),
+                $this->filesystem->url($storedFontPath),
                 $localizedCss,
             );
         }

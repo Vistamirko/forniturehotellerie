@@ -99,6 +99,10 @@ class MarketplaceSettingForm extends SettingForm
                 'label' => trans('plugins/marketplace::marketplace.settings.hide_store_email'),
                 'value' => MarketplaceHelper::hideStoreEmail(),
             ])
+            ->add('hide_store_address', 'onOffCheckbox', [
+                'label' => trans('plugins/marketplace::marketplace.settings.hide_store_address'),
+                'value' => MarketplaceHelper::hideStoreAddress(),
+            ])
             ->add('hide_store_social_links', 'onOffCheckbox', [
                 'label' => trans('plugins/marketplace::marketplace.settings.hide_store_social_links'),
                 'value' => MarketplaceHelper::hideStoreSocialLinks(),

@@ -85,7 +85,7 @@
     @endphp
 
     <div class="page-wrapper justify-content-center min-h-full">
-        <div class="page-body">
+        <div class="page-body page-content">
             <div class="container-xl installer-container">
                 <div class="row mb-6">
                     <div class="col">

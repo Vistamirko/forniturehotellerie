@@ -133,7 +133,9 @@ class PluginManagement {
             }
         })
 
-        this.checkUpdate()
+        if ($('button[data-check-update]').length) {
+            this.checkUpdate()
+        }
     }
 
     checkUpdate() {

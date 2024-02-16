@@ -132,7 +132,7 @@ class InvoiceHelper
 
             $content = $twigCompiler->compile($content, $this->getDataForInvoiceTemplate($invoice));
 
-            if ((int)get_ecommerce_setting('invoice_support_arabic_language', 0) == 1) {
+            if ($this->getLanguageSupport() === 'arabic') {
                 $arabic = new Arabic();
                 $p = $arabic->arIdentify($content);
 
@@ -287,6 +287,21 @@ class InvoiceHelper
             );
         }
 
+        $data['settings']['extra_css'] = apply_filters('ecommerce_invoice_extra_css', null, $invoice);
+
+        $data['settings']['header_html'] = apply_filters('ecommerce_invoice_header_html', null, $invoice);
+
+        switch ($this->getLanguageSupport()) {
+            case 'bangladesh':
+                $data['settings']['header_html'] .= view('plugins/ecommerce::invoices.languages.bangladesh')->render();
+
+                break;
+            case 'chinese':
+                $data['settings']['header_html'] .= view('plugins/ecommerce::invoices.languages.chinese')->render();
+
+                break;
+        }
+
         $order = $invoice->reference;
 
         if ($order) {
@@ -396,5 +411,24 @@ class InvoiceHelper
     public function getCompanyZipCode(): string|null
     {
         return get_ecommerce_setting('company_zipcode_for_invoicing', get_ecommerce_setting('store_zip_code'));
+    }
+
+    public function getLanguageSupport(): string
+    {
+        $languageSupport = get_ecommerce_setting('invoice_language_support');
+
+        if (! empty($languageSupport)) {
+            return $languageSupport;
+        }
+
+        if (get_ecommerce_setting('invoice_support_arabic_language', false)) {
+            return 'arabic';
+        }
+
+        if (get_ecommerce_setting('invoice_support_bangladesh_language', false)) {
+            return 'bangladesh';
+        }
+
+        return '';
     }
 }

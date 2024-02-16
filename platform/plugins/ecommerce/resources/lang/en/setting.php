@@ -163,7 +163,7 @@ return [
             'using_custom_font_for_invoice' => 'Using custom font for invoice',
             'invoice_font_family' => 'Invoice font family (Only work for Latin language)',
             'enable_invoice_stamp' => 'Enable invoice stamp',
-            'invoice_support_arabic_language' => 'Support Arabic language in invoice',
+            'add_language_support' => 'Add language support',
             'disable_order_invoice_until_order_confirmed' => 'Disable order invoice until order confirmed',
         ],
     ],

@@ -546,7 +546,7 @@ class PublicController extends BaseController
         return Theme::scope(
             'ecommerce.customers.order-returns.list',
             compact('requests'),
-            'plugins/ecommerce::themes.customers.orders.returns.list'
+            'plugins/ecommerce::themes.customers.order-returns.list'
         )->render();
     }
 
@@ -631,7 +631,7 @@ class PublicController extends BaseController
             ])
             ->whereHas('order', function (Builder $query) {
                 $query
-                    ->where('user_id', auth('customer')->id())
+                    ->when(auth('customer')->id(), fn (Builder $query, $customerId) => $query->where('user_id', $customerId))
                     ->where('is_finished', 1)
                     ->when(is_plugin_active('payment'), function (Builder $query) {
                         $query

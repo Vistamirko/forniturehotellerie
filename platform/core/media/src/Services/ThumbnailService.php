@@ -184,7 +184,7 @@ class ThumbnailService
         } catch (Exception $exception) {
             BaseHelper::logError($exception);
 
-            return false;
+            throw $exception;
         }
 
         return $destinationPath;

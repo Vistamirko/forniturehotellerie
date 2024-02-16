@@ -41,6 +41,15 @@ class ThemeService
 
         try {
             $content = BaseHelper::getFileData($this->getPath($theme, 'theme.json'));
+            $config = $this->getThemeConfig($theme);
+            $inheritTheme = Arr::get($config, 'inherit');
+
+            if (! Theme::exists($inheritTheme)) {
+                return [
+                    'error' => true,
+                    'message' => trans('packages/theme::theme.theme_inherit_not_found', ['name' => $inheritTheme]),
+                ];
+            }
 
             if (! empty($content)) {
                 $requiredPlugins = Arr::get($content, 'required_plugins', []);
@@ -169,10 +178,17 @@ class ThemeService
             return $validate;
         }
 
-        if (Theme::getThemeName() == $theme) {
+        if (Theme::getThemeName() === $theme) {
             return [
                 'error' => true,
                 'message' => trans('packages/theme::theme.cannot_remove_theme', ['name' => $theme]),
+            ];
+        }
+
+        if (Theme::getInheritTheme() === $theme) {
+            return [
+                'error' => true,
+                'message' => trans('packages/theme::theme.cannot_remove_inherit_theme', ['name' => $theme]),
             ];
         }
 
@@ -209,5 +225,12 @@ class ThemeService
             'error' => false,
             'message' => trans('packages/theme::theme.removed_assets', ['name' => $theme]),
         ];
+    }
+
+    public function getThemeConfig(string $theme): array
+    {
+        $configFile = $this->getPath($theme, 'config.php');
+
+        return $this->files->exists($configFile) ? $this->files->getRequire($configFile) : [];
     }
 }

@@ -491,8 +491,14 @@ class BaseHelper
         return implode(DIRECTORY_SEPARATOR, $paths);
     }
 
-    public function hasIcon(string $name): bool
+    public function hasIcon(string|null $name): bool
     {
+        if (! $name) {
+            return false;
+        }
+
+        $name = str_replace('ti ti-', '', $name);
+
         return File::exists(sprintf(core_path('base/resources/views/components/icons/%s.blade.php'), $name));
     }
 
@@ -508,5 +514,14 @@ class BaseHelper
         return Blade::renderComponent(
             (new BadgeComponent($label, $color))->withAttributes($attributes)
         );
+    }
+
+    public function cleanToastMessage(string $message): string
+    {
+        if (str_contains('http://', $message) || str_contains('https://', $message)) {
+            return $message;
+        }
+
+        return addslashes($message);
     }
 }

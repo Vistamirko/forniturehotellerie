@@ -107,7 +107,9 @@ class Ecommerce {
                 this.#ajaxSearchProducts(currentTarget.closest('form'), currentTarget.prop('href'))
             })
 
-        this.initPriceFilter()
+        if ($('.bb-product-price-filter').length) {
+            this.initPriceFilter()
+        }
     }
 
     /**

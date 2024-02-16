@@ -1,6 +1,6 @@
 @php
     $supportedLocales = Language::getSupportedLocales();
-    if (!isset($options) || empty($options)) {
+    if (empty($options)) {
         $options = [
             'before' => '',
             'lang_flag' => true,
@@ -17,7 +17,8 @@
     @endphp
     @if (setting('language_switcher_display', 'dropdown') == 'dropdown')
         <li>
-            <a class="language-dropdown-active" href="#"> @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag'))
+            <a class="language-dropdown-active"
+               href="javascript:void(0)"> @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag'))
                     {!! language_flag(Language::getCurrentLocaleFlag(), Language::getCurrentLocaleName()) !!}
                 @endif
                 @if (Arr::get($options, 'lang_name', true) && ($languageDisplay == 'all' || $languageDisplay == 'name'))
@@ -30,8 +31,12 @@
                     @if ($localeCode != Language::getCurrentLocale())
                         <li>
                             <a href="{{ Language::getSwitcherUrl($localeCode, $properties['lang_code']) }}">
-                                @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag')){!! language_flag($properties['lang_flag'], $properties['lang_name']) !!}@endif
-                                @if (Arr::get($options, 'lang_name', true) && ($languageDisplay == 'all' || $languageDisplay == 'name'))&nbsp;<span>{{ $properties['lang_name'] }}</span>@endif
+                                @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag'))
+                                    {!! language_flag($properties['lang_flag'], $properties['lang_name']) !!}
+                                @endif
+                                @if (Arr::get($options, 'lang_name', true) && ($languageDisplay == 'all' || $languageDisplay == 'name'))
+                                    &nbsp;<span>{{ $properties['lang_name'] }}</span>
+                                @endif
                             </a>
                         </li>
                     @endif
@@ -43,8 +48,12 @@
             @if ($localeCode != Language::getCurrentLocale())
                 <li>
                     <a href="{{ Language::getSwitcherUrl($localeCode, $properties['lang_code']) }}">
-                        @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag')){!! language_flag($properties['lang_flag'], $properties['lang_name']) !!}@endif
-                        @if (Arr::get($options, 'lang_name', true) && ($languageDisplay == 'all' || $languageDisplay == 'name'))&nbsp;<span>{{ $properties['lang_name'] }}</span>@endif
+                        @if (Arr::get($options, 'lang_flag', true) && ($languageDisplay == 'all' || $languageDisplay == 'flag'))
+                            {!! language_flag($properties['lang_flag'], $properties['lang_name']) !!}
+                        @endif
+                        @if (Arr::get($options, 'lang_name', true) && ($languageDisplay == 'all' || $languageDisplay == 'name'))
+                            &nbsp;<span>{{ $properties['lang_name'] }}</span>
+                        @endif
                     </a>
                 </li>
             @endif

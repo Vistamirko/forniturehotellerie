@@ -216,7 +216,7 @@ class EcommerceHelper
 
     public function getAvailableStatesByCountry(int|string|null $countryId): array
     {
-        if (! $this->loadCountriesStatesCitiesFromPluginLocation()) {
+        if (! $this->loadCountriesStatesCitiesFromPluginLocation() || ! $countryId) {
             return [];
         }
 
@@ -233,7 +233,7 @@ class EcommerceHelper
 
     public function getAvailableCitiesByState(int|string|null $stateId, int|string|null $countryId = null): array
     {
-        if (! $this->loadCountriesStatesCitiesFromPluginLocation()) {
+        if (! $this->loadCountriesStatesCitiesFromPluginLocation() || ! $stateId) {
             return [];
         }
 

@@ -466,7 +466,7 @@ trait ProductActionsTrait
                 'image',
                 'price',
             ])
-            ->simplePaginate(5);
+            ->simplePaginate(10);
 
         $includeVariation = $request->input('include_variation', 0);
 
@@ -528,7 +528,7 @@ trait ProductActionsTrait
                         'ec_product_variations.id'
                     );
             })
-            ->simplePaginate(5);
+            ->simplePaginate(10);
 
         foreach ($availableProducts as &$availableProduct) {
             $image = Arr::first($availableProduct->images) ?? null;
@@ -582,9 +582,11 @@ trait ProductActionsTrait
             ->with(['variationInfo.configurableProduct'])
             ->when($keyword, function ($query) use ($keyword) {
                 $query->where(function ($query) use ($keyword) {
+                    $keyword = '%' . trim($keyword) . '%';
+
                     $query
-                        ->where('name', 'LIKE', '%' . $keyword . '%')
-                        ->orWhere('sku', 'LIKE', '%' . $keyword . '%');
+                        ->where('name', 'LIKE', $keyword)
+                        ->orWhere('sku', 'LIKE', $keyword);
                 });
             });
 
@@ -604,7 +606,7 @@ trait ProductActionsTrait
             $availableProducts = $availableProducts->whereIn('store_id', $storeIds)->with(['store']);
         }
 
-        $availableProducts = $availableProducts->simplePaginate(5);
+        $availableProducts = $availableProducts->simplePaginate(10);
 
         return $response->setData(AvailableProductResource::collection($availableProducts)->response()->getData());
     }
